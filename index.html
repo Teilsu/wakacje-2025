@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="pl">
 <head>
@@ -734,18 +735,23 @@ function sortDataAndRender() {
 		if (["Mapa", "Google", "Strona"].includes(key) && /^https?:\/\//.test(value)) {
 		  const link = document.createElement("a");
 		  link.href = value.trim();
-		  link.textContent = key.trim();
-		  link.target = "_blank";
-		  link.rel = "noopener noreferrer";
-		  link.className = "link-button";
+		link.textContent = key.trim();
+		link.className = "link-hyperlink"; // opcjonalnie do CSS
+		link.style.textDecoration = "underline";
+		link.style.color = "#0645AD"; // klasyczny niebieski
+		link.style.margin = "4px";
+		link.style.fontSize = "14px";
 		  link.style.display = "inline-block";
-		  link.style.padding = "6px 10px";
-		  link.style.margin = "4px";
-		  link.style.backgroundColor = "#4CAF50";
-		  link.style.color = "white";
-		  link.style.borderRadius = "8px";
-		  link.style.textDecoration = "none";
-		  link.style.fontSize = "14px";
+  link.style.padding = "8px 14px";
+  link.style.margin = "4px";
+  link.style.backgroundColor = "#007BFF"; // niebieski
+  link.style.color = "white";
+  link.style.borderRadius = "6px";
+  link.style.textDecoration = "none";
+  link.style.fontSize = "14px";
+  link.style.boxShadow = "0 2px 4px rgba(0,0,0,0.2)";
+  link.style.transition = "background-color 0.3s";
+
 		  linksRow.appendChild(link);
 		  } else if (!["Mapa", "Google", "Strona", "Obrazek"].includes(key)) {
 			// Tworzymy wiersz
