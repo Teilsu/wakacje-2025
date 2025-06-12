@@ -618,7 +618,7 @@ resetBtn.style.justifyContent = "center";
   const searchInput = document.createElement("input");
   searchInput.type = "text";
   searchInput.id = "search-input";
-  searchInput.placeholder = "Szukaj po nazwie...";
+  searchInput.placeholder = "Szukaj...";
   searchInput.style.padding = "6px 28px 6px 10px";
   searchInput.style.fontSize = "1em";
   searchInput.style.border = "1px solid #ccc";
@@ -655,32 +655,6 @@ resetBtn.style.justifyContent = "center";
 
   headerBar.appendChild(sortControls);
   headerBar.appendChild(searchContainer);
-  
-   // 🔽 RESPONSYWNOŚĆ (JS-em zamiast CSS)
-  function adjustLayoutForMobile() {
-    const isMobile = window.innerWidth <= 600;
-    if (isMobile) {
-      headerBar.style.flexDirection = "column";
-      headerBar.style.alignItems = "stretch";
-      sortControls.style.width = "100%";
-      searchContainer.style.width = "100%";
-      searchInput.style.width = "100%";
-      searchInput.style.margin = "5px 0";
-      dropdownWrapper.style.width = "100%";
-    } else {
-      headerBar.style.flexDirection = "row";
-      headerBar.style.alignItems = "center";
-      sortControls.style.width = "";
-      searchContainer.style.width = "";
-      searchInput.style.width = "";
-      searchInput.style.margin = "";
-      dropdownWrapper.style.width = "";
-    }
-  }
-
-  window.addEventListener("resize", adjustLayoutForMobile);
-  adjustLayoutForMobile(); // ← wywołanie od razu przy starcie
-
 }
 
 
