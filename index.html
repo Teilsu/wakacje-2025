@@ -375,7 +375,29 @@
   }
 }
 
+  @media (max-width: 600px) {
+    #header-bar {
+      flex-direction: column;
+      align-items: stretch;
+    }
 
+    #header-bar > div {
+      width: 100%;
+    }
+
+    #search-input {
+      width: 100%;
+      margin: 5px 0;
+    }
+
+    #search-clear {
+      right: 10px;
+    }
+
+    .dropdown-wrapper {
+      width: 100% !important;
+    }
+  }
   </style>
 </head>
 <body>
