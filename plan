@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Plan 8-dniowej wycieczki do Kłodzka</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background-color: #f5f7fa;
+      color: #333;
+      line-height: 1.6;
+      margin: 0;
+      padding: 0;
+    }
+    header {
+      background-color: #2e86de;
+      color: white;
+      padding: 20px 0;
+      text-align: center;
+    }
+    .container {
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 20px;
+    }
+    .day {
+      background: white;
+      border-radius: 12px;
+      padding: 20px;
+      margin-bottom: 20px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    }
+    .day h2 {
+      color: #2e86de;
+    }
+    .time-block {
+      margin-bottom: 10px;
+    }
+    .time {
+      font-weight: bold;
+      color: #555;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>8-dniowa wycieczka do Kłodzka</h1>
+    <p>z pobudką o 10:00 i jednym dniem w Czechach</p>
+  </header>
+  <div class="container">
+
+    <!-- Dni wycieczki -->
+    <div class="day">
+      <h2>Dzień 1 – Przyjazd i poznanie Kłodzka</h2>
+      <div class="time-block"><span class="time">10:00</span> – Pobudka i śniadanie</div>
+      <div class="time-block"><span class="time">12:00</span> – Przyjazd, zakwaterowanie</div>
+      <div class="time-block"><span class="time">13:00</span> – Obiad w centrum</div>
+      <div class="time-block"><span class="time">14:30</span> – Spacer po starówce</div>
+      <div class="time-block"><span class="time">17:00</span> – Kawa / lody</div>
+      <div class="time-block"><span class="time">18:30</span> – Odpoczynek</div>
+      <div class="time-block"><span class="time">20:00</span> – Kolacja</div>
+    </div>
+
+    <!-- Dzień 2 -->
+    <div class="day">
+      <h2>Dzień 2 – Twierdza Kłodzko + podziemia</h2>
+      <div class="time-block"><span class="time">10:00</span> – Pobudka i śniadanie</div>
+      <div class="time-block"><span class="time">11:30</span> – Twierdza Kłodzko</div>
+      <div class="time-block"><span class="time">13:15</span> – Lunch</div>
+      <div class="time-block"><span class="time">14:30</span> – Podziemna Trasa</div>
+      <div class="time-block"><span class="time">17:00</span> – Muzeum (opcjonalnie)</div>
+      <div class="time-block"><span class="time">20:00</span> – Kolacja</div>
+    </div>
+
+    <!-- Pozostałe dni analogicznie -->
+    <div class="day">
+      <h2>Dzień 3 – Góry Stołowe</h2>
+      <div class="time-block"><span class="time">10:00</span> – Pobudka i śniadanie</div>
+      <div class="time-block"><span class="time">11:00</span> – Wyjazd</div>
+      <div class="time-block"><span class="time">12:00</span> – Błędne Skały</div>
+      <div class="time-block"><span class="time">14:00</span> – Obiad</div>
+      <div class="time-block"><span class="time">15:00</span> – Szczeliniec Wielki</div>
+      <div class="time-block"><span class="time">18:00</span> – Powrót</div>
+    </div>
+
+    <div class="day">
+      <h2>Dzień 4 – Międzygórze</h2>
+      <div class="time-block"><span class="time">10:00</span> – Pobudka</div>
+      <div class="time-block"><span class="time">11:00</span> – Wyjazd</div>
+      <div class="time-block"><span class="time">12:00</span> – Wodospad Wilczki</div>
+      <div class="time-block"><span class="time">13:00</span> – Ogród Bajek</div>
+      <div class="time-block"><span class="time">15:00</span> – Obiad</div>
+    </div>
+
+    <div class="day">
+      <h2>Dzień 5 – Czechy: Nachod + Kudowa-Zdrój</h2>
+      <div class="time-block"><span class="time">10:00</span> – Pobudka</div>
+      <div class="time-block"><span class="time">11:00</span> – Wyjazd do Nachodu</div>
+      <div class="time-block"><span class="time">12:00</span> – Zamek w Nachodzie</div>
+      <div class="time-block"><span class="time">13:30</span> – Obiad</div>
+      <div class="time-block"><span class="time">15:00</span> – Kudowa-Zdrój</div>
+    </div>
+
+    <div class="day">
+      <h2>Dzień 6 – Duszniki-Zdrój</h2>
+      <div class="time-block"><span class="time">10:00</span> – Pobudka</div>
+      <div class="time-block"><span class="time">11:00</span> – Duszniki-Zdrój</div>
+      <div class="time-block"><span class="time">13:00</span> – Obiad</div>
+      <div class="time-block"><span class="time">14:30</span> – Muzeum Papiernictwa</div>
+    </div>
+
+    <div class="day">
+      <h2>Dzień 7 – Relaks / Zamek w Szczytnej</h2>
+      <div class="time-block"><span class="time">10:00</span> – Pobudka</div>
+      <div class="time-block"><span class="time">11:30</span> – Czas wolny</div>
+      <div class="time-block"><span class="time">13:00</span> – Zamek Leśna (opcjonalnie)</div>
+      <div class="time-block"><span class="time">15:00</span> – Obiad</div>
+    </div>
+
+    <div class="day">
+      <h2>Dzień 8 – Wyjazd</h2>
+      <div class="time-block"><span class="time">10:00</span> – Pobudka i śniadanie</div>
+      <div class="time-block"><span class="time">12:00</span> – Wykwaterowanie</div>
+    </div>
+
+  </div>
+</body>
+</html>
