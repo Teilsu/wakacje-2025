@@ -564,151 +564,293 @@ sortArrow.innerHTML = '<img src="arrow.svg" alt="Sortuj" style="width: 20px; tra
 sortArrow.title = "Kliknij, aby zmienić kierunek sortowania";
 sortArrow.style.marginLeft = "20px";
 sortArrow.style.cursor = "pointer";
+sortArrow.style.userSelect = "none";
 sortArrow.style.visibility = "hidden";
-sortArrow.addEventListener("click", () => {
-  if (!currentSort.key) return;
-  currentSort.ascending = !currentSort.ascending;
-  sortArrow.style.transform = currentSort.ascending ? "rotate(0deg)" : "rotate(180deg)";
-  sortDataAndRender();
-});
+sortArrow.style.display = "flex";
+sortArrow.style.alignItems = "center";
+sortArrow.style.justifyContent = "center";
 
-const resetBtn = document.createElement("div");
-resetBtn.textContent = "✖";
-resetBtn.title = "Reset sortowania";
-resetBtn.className = "sort-reset-button";
+
+  sortArrow.addEventListener("click", () => {
+    if (!currentSort.key) return;
+    currentSort.ascending = !currentSort.ascending;
+    const img = sortArrow.querySelector("img");
+	img.style.transform = currentSort.ascending ? "rotate(0deg)" : "rotate(180deg)";
+    sortDataAndRender();
+  });
+
+const resetBtn = document.createElement("button");
+resetBtn.innerHTML = `<img src="https://i.imgur.com/FRA2W1u.png" alt="Reset" style="width: 38px; height: 38px;">`;
+resetBtn.title = "Resetuj sortowanie";
+resetBtn.style.marginLeft = "15px";
 resetBtn.style.cursor = "pointer";
-resetBtn.style.fontSize = "1.4em";
-resetBtn.style.marginLeft = "10px";
+resetBtn.style.fontSize = "1.2em";
+resetBtn.style.userSelect = "none";
+resetBtn.style.background = "transparent";
+resetBtn.style.border = "none";
+resetBtn.style.color = "#666";
 resetBtn.style.visibility = "hidden";
-resetBtn.addEventListener("click", () => {
-  currentSort = { key: null, ascending: true };
-  dropdownButton.textContent = "Sortuj ▾";
-  sortArrow.style.visibility = "hidden";
-  resetBtn.style.visibility = "hidden";
-  sortDataAndRender();
-});
+resetBtn.style.display = "flex";
+resetBtn.style.alignItems = "center";
+resetBtn.style.justifyContent = "center";
 
-sortControls.appendChild(dropdownWrapper);
-sortControls.appendChild(sortArrow);
-sortControls.appendChild(resetBtn);
 
-const searchInput = document.createElement("input");
-searchInput.id = "search-input";
-searchInput.type = "text";
-searchInput.placeholder = "Szukaj...";
-searchInput.style.marginRight = "10px";
+  resetBtn.addEventListener("click", () => {
+    currentSort.key = "";
+    currentSort.ascending = true;
+    sortArrow.style.visibility = "hidden";
+    resetBtn.style.visibility = "hidden";
+    dropdownButton.textContent = "Sortuj ▾";
+    sortDataAndRender();
+  });
 
-headerBar.appendChild(sortControls);
-headerBar.appendChild(searchInput);
+  sortControls.appendChild(dropdownWrapper);
+  sortControls.appendChild(sortArrow);
+  sortControls.appendChild(resetBtn);
+
+  // Wyszukiwanie
+  const searchContainer = document.createElement("div");
+  searchContainer.style.position = "relative";
+  searchContainer.style.display = "inline-block";
+  searchContainer.style.marginRight = "25px"; // np. 20px odstępu od prawejprawejprawejprawejprawejprawejprawejprawejprawejprawejprawejprawejprawej
+
+
+  const searchInput = document.createElement("input");
+  searchInput.type = "text";
+  searchInput.id = "search-input";
+  searchInput.placeholder = "Szukaj...";
+  searchInput.style.padding = "6px 28px 6px 10px";
+  searchInput.style.fontSize = "1em";
+  searchInput.style.border = "1px solid #ccc";
+  searchInput.style.borderRadius = "100px";
+
+  const clearBtn = document.createElement("button");
+  clearBtn.id = "search-clear";
+  clearBtn.textContent = "✕";
+  clearBtn.title = "Wyczyść wyszukiwanie";
+  clearBtn.style.position = "absolute";
+  clearBtn.style.right = "15px";
+  clearBtn.style.top = "50%";
+  clearBtn.style.transform = "translateY(-50%)";
+  clearBtn.style.border = "none";
+  clearBtn.style.background = "transparent";
+  clearBtn.style.fontSize = "16px";
+  clearBtn.style.cursor = "pointer";
+  clearBtn.style.color = "#666";
+  clearBtn.style.display = "none";
+
+  searchInput.addEventListener("input", () => {
+    clearBtn.style.display = searchInput.value ? "inline" : "none";
+    sortDataAndRender();
+  });
+
+  clearBtn.addEventListener("click", () => {
+    searchInput.value = "";
+    clearBtn.style.display = "none";
+    sortDataAndRender();
+  });
+
+  searchContainer.appendChild(searchInput);
+  searchContainer.appendChild(clearBtn);
+
+  headerBar.appendChild(sortControls);
+  headerBar.appendChild(searchContainer);
 }
+
+
+
 
 function sortDataAndRender() {
-  const input = document.getElementById("search-input").value.toLowerCase();
+  let filteredData = [...data];
 
-  let filtered = data.filter(entry => {
-    return Object.values(entry).some(value =>
-      value.toLowerCase().includes(input)
+  const searchValue = document.getElementById("search-input")?.value.toLowerCase().trim();
+  if (searchValue) {
+    filteredData = filteredData.filter(item => 
+      (item["Nazwa"] || "").toLowerCase().includes(searchValue)
     );
-  });
-
-  if (currentSort.key) {
-    filtered.sort((a, b) => {
-      const valA = a[currentSort.key] || "";
-      const valB = b[currentSort.key] || "";
-      if (valA < valB) return currentSort.ascending ? -1 : 1;
-      if (valA > valB) return currentSort.ascending ? 1 : -1;
-      return 0;
-    });
   }
 
-  renderItems(filtered);
-}
+  if (!currentSort.key) {
+    renderItems(filteredData);
+    return;
+  }
 
-function renderItems(items) {
-  const container = document.getElementById("container-wrapper");
-  container.innerHTML = "";
+  // Sortowanie na filteredData
+  filteredData.sort((a, b) => {
+    let valA = (a[currentSort.key] || "").toString().trim();
+    let valB = (b[currentSort.key] || "").toString().trim();
 
-  items.forEach((item, index) => {
-    const wrapper = document.createElement("div");
-    wrapper.className = "item-wrapper";
+    const numA = parseFloat(valA.replace(',', '.'));
+    const numB = parseFloat(valB.replace(',', '.'));
 
-    const button = document.createElement("button");
-    button.className = "item-button";
-    button.style.backgroundImage = item.Obrazek ? `url(${item.Obrazek})` : "";
-
-    const name = document.createElement("div");
-    name.className = "name-content";
-    name.textContent = item.Nazwa || "(bez nazwy)";
-
-    button.appendChild(name);
-
-    const rowContainer = document.createElement("div");
-    rowContainer.className = index % 2 === 0 ? "even" : "odd";
-
-    Object.entries(item).forEach(([key, value]) => {
-      if (["Nazwa", "Obrazek", "Mapa", "Google", "Strona", "Uwagi / Wskazówki"].includes(key)) return;
-      const row = document.createElement("div");
-      row.className = "row-content";
-      row.textContent = `${key}: ${value}`;
-      rowContainer.appendChild(row);
-    });
-
-    button.appendChild(rowContainer);
-
-    if (item["Uwagi / Wskazówki"]) {
-      const uwagiDiv = document.createElement("div");
-      uwagiDiv.className = "uwagi-background";
-
-      item["Uwagi / Wskazówki"].split(";").forEach(uw => {
-        const row = document.createElement("div");
-        row.className = "row-content";
-        row.textContent = uw.trim();
-        uwagiDiv.appendChild(row);
-      });
-
-      button.appendChild(uwagiDiv);
+    if (!isNaN(numA) && !isNaN(numB)) {
+      return currentSort.ascending ? numA - numB : numB - numA;
     }
 
-    const links = document.createElement("div");
-    links.className = "link-buttons-row";
+    const dateA = new Date(valA);
+    const dateB = new Date(valB);
 
-    if (item.Mapa) {
-      const mapaBtn = document.createElement("a");
-      mapaBtn.href = item.Mapa;
-      mapaBtn.textContent = "Mapa";
-      mapaBtn.target = "_blank";
-      mapaBtn.className = "link-button";
-      links.appendChild(mapaBtn);
+    if (!isNaN(dateA) && !isNaN(dateB)) {
+      return currentSort.ascending ? dateA - dateB : dateB - dateA;
     }
 
-    if (item.Google) {
-      const googleBtn = document.createElement("a");
-      googleBtn.href = item.Google;
-      googleBtn.textContent = "Google";
-      googleBtn.target = "_blank";
-      googleBtn.className = "link-button";
-      links.appendChild(googleBtn);
-    }
+    valA = valA.toLowerCase();
+    valB = valB.toLowerCase();
 
-    if (item.Strona) {
-      const stronaBtn = document.createElement("a");
-      stronaBtn.href = item.Strona;
-      stronaBtn.textContent = "Strona";
-      stronaBtn.target = "_blank";
-      stronaBtn.className = "link-button";
-      links.appendChild(stronaBtn);
-    }
-
-    button.appendChild(links);
-    wrapper.appendChild(button);
-    container.appendChild(wrapper);
+    if (valA < valB) return currentSort.ascending ? -1 : 1;
+    if (valA > valB) return currentSort.ascending ? 1 : -1;
+    return 0;
   });
-}
-</script>
 
-<a href="#" id="fixed-circle-btn"></a>
-<a href="#" id="fixed-circle-btn-jedzonko" title="Jedzonko!"></a>
+  renderItems(filteredData);
+}
+
+
+
+
+	function renderItems(items) {
+	  const container = document.getElementById("container-wrapper");
+	  container.innerHTML = "";
+
+	  items.forEach((item, index) => {
+		const wrapper = document.createElement("div");
+		wrapper.className = `item-wrapper ${index % 2 === 0 ? "even" : "odd"}`;
+
+		const button = document.createElement("button");
+		button.className = "item-button";
+
+		if (item["Obrazek"]) {
+		  button.style.backgroundImage = `url(${item["Obrazek"]})`;
+		}
+
+		const linksRow = document.createElement("div");
+		linksRow.className = "link-buttons-row";
+
+		Object.keys(item).forEach((key) => {
+		  let value = item[key] || "";
+
+		  if (value.trim() === "") return;
+
+		if (["Mapa", "Google", "Strona"].includes(key) && /^https?:\/\//.test(value)) {
+		  const link = document.createElement("a");
+		  link.href = value.trim();
+		  link.textContent = key.trim();
+		  link.target = "_blank";
+		  link.rel = "noopener noreferrer";
+		  link.className = "link-button";
+		  link.style.display = "inline-block";
+		  link.style.padding = "6px 10px";
+		  link.style.margin = "4px";
+		  link.style.backgroundColor = "#222";
+		  link.style.color = "white";
+		  link.style.borderRadius = "8px";
+		  link.style.textDecoration = "none";
+		  link.style.fontSize = "14px";
+		  linksRow.appendChild(link);
+		  } else if (!["Mapa", "Google", "Strona", "Obrazek"].includes(key)) {
+			// Tworzymy wiersz
+			const row = document.createElement("div");
+			row.className = `row-content`;
+
+			if (key === "Godziny otwarcia") {
+			  value += " " + getTimeUntilClose(value);
+			}
+
+			if (key === "Uwagi / Wskazówki") {
+			  // Tworzymy tekst
+			  row.textContent = value;
+
+			  // Tworzymy dodatkowy div z tłem
+			  const bg = document.createElement("div");
+			  bg.className = "uwagi-background";
+
+			  bg.appendChild(row);
+			  button.appendChild(bg);
+			} else if (key === "Nazwa") {
+			  row.textContent = value;
+			  row.classList.add("name-content");
+			  button.appendChild(row);
+			} else {
+			row.innerHTML = `<strong>${key}:</strong> ${value}`;
+			button.appendChild(row);
+			}
+		  }
+		});
+
+		if (linksRow.children.length > 0) {
+		  button.appendChild(linksRow);
+		}
+
+		wrapper.appendChild(button);
+		container.appendChild(wrapper);
+	  });
+	}
+
+// Przycisk przełączający arkusz i ikonę
+const btnToggleSheet = document.createElement("button");
+btnToggleSheet.title = "Przełącz arkusz";
+btnToggleSheet.style.position = "fixed";
+btnToggleSheet.style.bottom = "80px";
+btnToggleSheet.style.right = "20px";
+btnToggleSheet.style.borderRadius = "50%";
+btnToggleSheet.style.width = "50px";
+btnToggleSheet.style.height = "50px";
+btnToggleSheet.style.fontSize = "24px";
+btnToggleSheet.style.cursor = "pointer";
+btnToggleSheet.style.backgroundColor = "#222";
+btnToggleSheet.style.border = "none";
+btnToggleSheet.style.color = "white";
+btnToggleSheet.style.display = "flex";
+btnToggleSheet.style.alignItems = "center";
+btnToggleSheet.style.justifyContent = "center";
+btnToggleSheet.style.boxShadow = "0 2px 5px rgba(0,0,0,0.3)";
+
+let showingArkusz1 = true;
+
+btnToggleSheet.textContent = "🍽️";  // ikona dokumentu dla Zwiedzanko
+
+btnToggleSheet.addEventListener("click", () => {
+  if (showingArkusz1) {
+    sheetName = "Jedzonko";
+    btnToggleSheet.textContent = "📄"; // ikona talerza dla Jedzonko
+  } else {
+    sheetName = "Zwiedzanko";
+    btnToggleSheet.textContent = "🍽️";  // ikona dokumentu
+  }
+  showingArkusz1 = !showingArkusz1;
+  loadData();
+});
+
+document.body.appendChild(btnToggleSheet);
+
+// Na start ładujemy dane
+loadData();
+
+
+
+	fetch(url)
+	  .then(response => response.json())
+	  .then(json => {
+		data = json;
+		if (!data.length) {
+		  document.getElementById('container-wrapper').textContent = "Brak danych do wyświetlenia.";
+		  return;
+		}
+
+		const headers = Object.keys(data[0]);
+		createHeaderBar(headers);
+		renderItems(data);
+
+		// ✅ TU DODAJ TO:
+		document.getElementById("search-input").addEventListener("input", sortDataAndRender);
+	  })
+	  .catch(err => {
+		document.getElementById('container-wrapper').textContent = "Błąd podczas pobierania danych: " + err;
+		console.error(err);
+	  });
+
+  </script>
+  <a href="https://twoja-strona.pl" target="_blank" id="fixed-circle-btn" title="Odwiedź stronę"></a>
 
 </body>
 </html>
-
