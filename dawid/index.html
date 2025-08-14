@@ -1,0 +1,75 @@
+<!doctype html>
+<html lang="pl">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Odliczanie</title>
+  <style>
+    body{
+      margin:0;
+      height:100vh;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      background:#0f172a;
+      color:#f8fafc;
+      font-family:sans-serif;
+    }
+    .timer{
+      display:grid;
+      grid-template-columns:repeat(4,auto);
+      gap:20px;
+      text-align:center;
+    }
+    .slot{
+      background:#1e293b;
+      padding:20px;
+      border-radius:12px;
+    }
+    .value{
+      font-size:48px;
+      font-weight:bold;
+    }
+    .label{
+      font-size:12px;
+      color:#94a3b8;
+      text-transform:uppercase;
+    }
+  </style>
+</head>
+<body>
+  <div class="timer">
+    <div class="slot"><div id="days" class="value">–</div><div class="label">dni</div></div>
+    <div class="slot"><div id="hours" class="value">–</div><div class="label">godziny</div></div>
+    <div class="slot"><div id="minutes" class="value">–</div><div class="label">minuty</div></div>
+    <div class="slot"><div id="seconds" class="value">–</div><div class="label">sekundy</div></div>
+  </div>
+  <script>
+    const target = new Date('2025-08-15T14:00:00Z');
+    const daysEl = document.getElementById('days');
+    const hoursEl = document.getElementById('hours');
+    const minutesEl = document.getElementById('minutes');
+    const secondsEl = document.getElementById('seconds');
+    function update(){
+      const now = new Date();
+      const diff = target - now;
+      if (diff <= 0){
+        daysEl.textContent = hoursEl.textContent = minutesEl.textContent = secondsEl.textContent = '00';
+        clearInterval(timer);
+        return;
+      }
+      const sec = Math.floor(diff/1000);
+      const d = Math.floor(sec/86400);
+      const h = Math.floor((sec%86400)/3600);
+      const m = Math.floor((sec%3600)/60);
+      const s = sec%60;
+      daysEl.textContent = String(d).padStart(2,'0');
+      hoursEl.textContent = String(h).padStart(2,'0');
+      minutesEl.textContent = String(m).padStart(2,'0');
+      secondsEl.textContent = String(s).padStart(2,'0');
+    }
+    update();
+    const timer = setInterval(update, 1000);
+  </script>
+</body>
+</html>
